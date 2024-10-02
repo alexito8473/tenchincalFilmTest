@@ -1,33 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Film } from './components/film'
+import { useObtainFilms } from './hooks/useFilms'
+import { useSearch } from './hooks/useSearch'
 import './App.css'
 
+
 function App() {
-  const [count, setCount] = useState(0)
+  const { search, error, canSearchFilm, handleChange, handleSubmit } = useSearch()
+  const { films,messageError,loading, searchFilms } = useObtainFilms({ search, canSearchFilm })
+
+  const handleOnClick = (event) => {
+    handleSubmit(event)
+    searchFilms()
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <header >
+        <form onChange={handleChange} onSubmit={handleOnClick}>
+          <>
+            <input name="title" placeholder='Matrix....'></input>
+            <button type='submit'>Push</button>
+          </>
+        </form>
+        {error ?? <span>{error}</span>}
+        {messageError??<span>{messageError}</span>}
+        {loading?<p>Esta cargando</p>:<></>}
+      </header>
+      <main>
+        <section className='listFilms'>
+          {
+            films ? films.map(film => {
+              return (
+                <Film key={film.id} film={film}></Film>
+              )
+            }) :
+              <p>Buscame una partida</p>
+          }
+        </section>
+      </main>
     </>
   )
 }
