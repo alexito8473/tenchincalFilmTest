@@ -7,7 +7,9 @@ export function Film({ film }) {
                     {film.title}
                 </h2>
                 <h3>{film.year}</h3>
-                <img src={film.poster}></img>
+                <div className="poster">
+                    <img src={film.poster} />
+                </div>
             </div>
         </>
     )

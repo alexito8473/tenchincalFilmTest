@@ -3,25 +3,33 @@ import { useEffect, useRef, useState } from 'react'
 export function useSearch() {
     const [search, setSearch] = useState('');
     const [error, setError] = useState("");
-    const [canSearchFilm, setCanSearchFilm]=useState(false)
+    const [canSearchFilm, setCanSearchFilm] = useState(false)
     const isFirstInput = useRef(true)
-
+    const [isSort, setSort] = useState(false)
     useEffect(() => {
-        if(isFirstInput.current){
-            if(search.length != 0){
-                isFirstInput.current=false
-            }else{
-                return
+        let canCheckSearch=true
+        if (isFirstInput.current) {
+            if (search.length != 0) {
+                isFirstInput.current = false
+                
+            } else {
+                canCheckSearch=false
             }
         }
-        checkSearch()
+        if(canCheckSearch){
+            checkSearch()
+        }
     }, [search])
+
+    const handleSort = () => {
+        setSort(!isSort)
+    }
 
     const handleChange = (event) => {
         setSearch(event.target.value)
     }
 
-    function checkSearch(){
+    function checkSearch() {
         if (search.length == 0) {
             setError("No me lo dejes vacio")
             return false;
@@ -36,9 +44,9 @@ export function useSearch() {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-       setSearch (new window.FormData(event.target).get("title"))
+        setSearch(new window.FormData(event.target).get("title"))
         setCanSearchFilm(checkSearch());
     }
 
-    return { search, error, canSearchFilm, handleChange, handleSubmit }
+    return { search, error, isSort, canSearchFilm, handleChange, handleSubmit, handleSort }
 }

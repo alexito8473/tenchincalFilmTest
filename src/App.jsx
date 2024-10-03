@@ -5,8 +5,8 @@ import './App.css'
 
 
 function App() {
-  const { search, error, canSearchFilm, handleChange, handleSubmit } = useSearch()
-  const { films,messageError,loading, searchFilms } = useObtainFilms({ search, canSearchFilm })
+  const { search, error, isSort, canSearchFilm, handleChange, handleSubmit, handleSort } = useSearch()
+  const { films, messageError, loading, searchFilms } = useObtainFilms({ search, canSearchFilm, isSort })
 
   const handleOnClick = (event) => {
     handleSubmit(event)
@@ -19,12 +19,16 @@ function App() {
         <form onChange={handleChange} onSubmit={handleOnClick}>
           <>
             <input name="title" placeholder='Matrix....'></input>
+            <div>
+            <input onChange={handleSort} type='checkbox' ></input>
+            <span>Sorted</span>
+            </div>
             <button type='submit'>Push</button>
           </>
         </form>
         {error ?? <span>{error}</span>}
-        {messageError??<span>{messageError}</span>}
-        {loading?<p>Esta cargando</p>:<></>}
+        {messageError ?? <span>{messageError}</span>}
+        {loading ? <p>Esta cargando</p> : <></>}
       </header>
       <main>
         <section className='listFilms'>
